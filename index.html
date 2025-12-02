@@ -629,6 +629,36 @@
             box-shadow: var(--shadow-green);
         }
 
+        /* Problem Areas Highlight */
+        .problem-areas {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 25px 30px;
+            margin: 40px 0;
+        }
+
+        .problem-areas h4 {
+            color: #ef4444;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .problem-areas p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-areas strong {
+            color: #ef4444;
+        }
+
         .cta-section h3 {
             font-family: 'Sora', sans-serif;
             font-size: 1.6rem;
@@ -853,6 +883,11 @@
                         <strong>Referência:</strong> Notas <strong>7-8</strong> indicam boa estruturação. Notas <strong>9-10</strong> representam excelência. Pilares abaixo de 7 precisam de atenção prioritária.
                     </div>
                 </div>
+            </div>
+
+            <div class="problem-areas" id="problemAreas" style="display: none;">
+                <h4>⚠️ Atenção aos Pilares Críticos</h4>
+                <p id="problemAreasText"></p>
             </div>
 
             <div class="chart-container">
@@ -1298,6 +1333,42 @@
         function displayDetailedResults(results) {
             const container = document.getElementById('detailedResults');
             container.innerHTML = '';
+
+            // Identificar pilares críticos (abaixo de 70%)
+            const criticalPilars = [];
+            topics.forEach(topic => {
+                const result = results.individual[topic.name];
+                if (result.percentage < 70) {
+                    criticalPilars.push({
+                        name: topic.label,
+                        percentage: result.percentage,
+                        icon: topic.icon
+                    });
+                }
+            });
+
+            // Mostrar alerta de pilares críticos
+            if (criticalPilars.length > 0) {
+                const problemAreasDiv = document.getElementById('problemAreas');
+                const problemAreasText = document.getElementById('problemAreasText');
+                
+                // Ordenar do pior para o melhor
+                criticalPilars.sort((a, b) => a.percentage - b.percentage);
+                
+                const pilarNames = criticalPilars.map(p => `<strong>${p.icon} ${p.name}</strong> (${p.percentage.toFixed(0)}%)`).join(', ');
+                
+                let message = '';
+                if (criticalPilars.length === 1) {
+                    message = `O pilar ${pilarNames} está abaixo da média e precisa de atenção prioritária. Esse gap pode estar travando seus resultados.`;
+                } else if (criticalPilars.length === 2) {
+                    message = `Os pilares ${pilarNames} estão abaixo da média e precisam de atenção prioritária. Resolver esses gaps pode destravar rapidamente seus resultados.`;
+                } else {
+                    message = `Os pilares ${pilarNames} estão abaixo da média. Esses são os principais pontos de atenção que precisam ser trabalhados para você evoluir.`;
+                }
+                
+                problemAreasText.innerHTML = message;
+                problemAreasDiv.style.display = 'block';
+            }
 
             // Sort by percentage (worst first)
             const sortedTopics = [...topics].sort((a, b) => 
