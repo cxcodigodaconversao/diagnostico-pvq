@@ -1,0 +1,29 @@
+{
+  "name": "pqv-diagnostico",
+  "version": "1.0.0",
+  "description": "Diagnóstico PQV - Avalie os 4 pilares do seu negócio digital",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Abra o index.html no navegador'",
+    "build": "echo 'Build complete - projeto estático'",
+    "deploy": "echo 'Deploy via Netlify'"
+  },
+  "keywords": [
+    "pqv",
+    "diagnóstico",
+    "produto que vende",
+    "negócio digital",
+    "oferta",
+    "funil",
+    "vendas"
+  ],
+  "author": "PQV",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SEU_USUARIO/pqv-diagnostico.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

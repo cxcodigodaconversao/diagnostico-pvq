@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diagnóstico PQV - Avalie os 4 pilares do seu negócio digital">
+    <meta name="keywords" content="PQV, diagnóstico, negócio digital, oferta, produto, vendas, funil">
+    <title>Diagnóstico PQV - Produto que Vende</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0f0d;
+            --bg-secondary: #0d1411;
+            --bg-card: #111916;
+            --green-primary: #10B981;
+            --green-light: #34D399;
+            --green-dark: #059669;
+            --green-glow: rgba(16, 185, 129, 0.35);
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-muted: #525252;
+            --border-color: rgba(16, 185, 129, 0.2);
+            --shadow-green: 0 0 50px rgba(16, 185, 129, 0.12);
+            --gradient-green: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(5, 150, 105, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 50px 20px 45px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient-green);
+            border-radius: 3px;
+            box-shadow: 0 0 25px var(--green-glow);
+        }
+
+        .logo-pqv {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-green);
+            padding: 16px 36px;
+            border-radius: 14px;
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--bg-primary);
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 40px var(--green-glow);
+            position: relative;
+        }
+
+        .logo-pqv::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: var(--gradient-green);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(15px);
+        }
+
+        .header h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 span {
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px 26px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-green);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .progress-text strong {
+            color: var(--green-primary);
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-primary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-green);
+            border-radius: 3px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+            position: relative;
+            box-shadow: 0 0 15px var(--green-glow);
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            background: var(--green-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--green-primary);
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: var(--shadow-green);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-green);
+            box-shadow: 0 0 20px var(--green-glow);
+        }
+
+        .question-card.fade-out {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .question-card.fade-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .topic-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--green-primary);
+            padding: 12px 22px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 25px;
+        }
+
+        .topic-indicator::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--green-primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 12px var(--green-primary);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        .question-number {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 35px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Rating Scale */
+        .rating-container {
+            margin: 30px 0;
+        }
+
+        .rating-scale {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 8px;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .rating-scale input[type="radio"] {
+            display: none;
+        }
+
+        .rating-scale label {
+            aspect-ratio: 1;
+            min-height: 44px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+        }
+
+        .rating-scale label:hover {
+            border-color: var(--green-primary);
+            color: var(--green-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .rating-scale input[type="radio"]:checked + label {
+            background: var(--gradient-green);
+            border-color: var(--green-primary);
+            color: var(--bg-primary);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 15px;
+            padding: 0 5px;
+        }
+
+        .scale-labels span {
+            max-width: 130px;
+            text-align: center;
+        }
+
+        .scale-labels span:first-child {
+            text-align: left;
+        }
+
+        .scale-labels span:last-child {
+            text-align: right;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--green-primary);
+            color: var(--green-primary);
+        }
+
+        .btn-primary {
+            background: var(--gradient-green);
+            color: var(--bg-primary);
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        .results {
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .results-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.6rem);
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .results-header h2 span {
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-summary {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-green);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-green);
+            box-shadow: 0 0 25px var(--green-glow);
+        }
+
+        .total-score {
+            font-family: 'Sora', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            line-height: 1;
+            text-shadow: 0 0 60px var(--green-glow);
+        }
+
+        .score-level {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            color: var(--green-primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .score-message {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .benchmark-note {
+            margin-top: 25px;
+            padding: 15px 25px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .benchmark-note strong {
+            color: var(--green-primary);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: var(--shadow-green);
+        }
+
+        .chart-title {
+            text-align: center;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* Detailed Results */
+        .detailed-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .result-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-green);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-family: 'Sora', sans-serif;
+            color: var(--green-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .result-score {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .result-score small {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .result-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .result-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--gradient-green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .result-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result-status.excellent {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+        }
+
+        .result-status.good {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34D399;
+        }
+
+        .result-status.warning {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .result-status.critical {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .result-feedback {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border-left: 3px solid var(--green-primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 50px;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: var(--shadow-green);
+        }
+
+        .cta-section h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient-green);
+            color: var(--bg-primary);
+            padding: 18px 40px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .header p {
+                font-size: 0.95rem;
+            }
+
+            .logo-pqv {
+                font-size: 1.6rem;
+                padding: 14px 30px;
+            }
+
+            .progress-section {
+                padding: 18px 20px;
+            }
+
+            .question-card {
+                padding: 30px 20px;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .rating-scale {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 6px;
+            }
+
+            .rating-scale label {
+                min-height: 40px;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+
+            .scale-labels {
+                font-size: 0.75rem;
+            }
+
+            .scale-labels span {
+                max-width: 90px;
+            }
+
+            .navigation-buttons {
+                gap: 12px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                font-size: 0.85rem;
+            }
+
+            .total-score {
+                font-size: 3.5rem;
+            }
+
+            .score-level {
+                font-size: 1.3rem;
+            }
+
+            .chart-container {
+                padding: 30px 15px;
+            }
+
+            .detailed-results {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .result-item {
+                padding: 25px 20px;
+            }
+
+            .cta-section {
+                padding: 40px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rating-scale {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 4px;
+            }
+
+            .rating-scale label {
+                min-height: 36px;
+                font-size: 0.8rem;
+                border-radius: 8px;
+            }
+
+            .question-text {
+                font-size: 1rem;
+            }
+
+            .total-score {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-pqv">PQV</div>
+            <h1>Diagnóstico <span>Estratégico</span></h1>
+            <p>Avalie os 4 pilares do seu negócio digital e descubra exatamente onde você precisa evoluir</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-info">
+                <span class="progress-text">Pergunta <strong id="currentQuestion">1</strong> de <strong>17</strong></span>
+                <span class="progress-text"><strong id="progressPercent">6%</strong> concluído</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="quiz-section" id="quizSection">
+            <div class="question-card" id="questionCard">
+                <div class="topic-indicator" id="topicIndicator">🎯 Direção Certeira</div>
+                <div class="question-number" id="questionNumber">Pergunta 1/17</div>
+                <div class="question-text" id="questionText">
+                    Como você avalia sua clareza sobre qual nicho e cliente ideal você deveria atender hoje?
+                </div>
+
+                <div class="rating-container">
+                    <div class="rating-scale">
+                        <input type="radio" name="currentAnswer" value="0" id="answer0">
+                        <label for="answer0">0</label>
+                        <input type="radio" name="currentAnswer" value="1" id="answer1">
+                        <label for="answer1">1</label>
+                        <input type="radio" name="currentAnswer" value="2" id="answer2">
+                        <label for="answer2">2</label>
+                        <input type="radio" name="currentAnswer" value="3" id="answer3">
+                        <label for="answer3">3</label>
+                        <input type="radio" name="currentAnswer" value="4" id="answer4">
+                        <label for="answer4">4</label>
+                        <input type="radio" name="currentAnswer" value="5" id="answer5">
+                        <label for="answer5">5</label>
+                        <input type="radio" name="currentAnswer" value="6" id="answer6">
+                        <label for="answer6">6</label>
+                        <input type="radio" name="currentAnswer" value="7" id="answer7">
+                        <label for="answer7">7</label>
+                        <input type="radio" name="currentAnswer" value="8" id="answer8">
+                        <label for="answer8">8</label>
+                        <input type="radio" name="currentAnswer" value="9" id="answer9">
+                        <label for="answer9">9</label>
+                        <input type="radio" name="currentAnswer" value="10" id="answer10">
+                        <label for="answer10">10</label>
+                    </div>
+                    <div class="scale-labels">
+                        <span>Nenhuma clareza</span>
+                        <span>Absolutamente definido</span>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" style="visibility: hidden;">← Anterior</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Próxima →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <div class="results-header">
+                <h2>Seu <span>Diagnóstico</span> Completo</h2>
+                <div class="score-summary">
+                    <div class="total-score" id="totalScore">0%</div>
+                    <div class="score-level" id="scoreLevel">Calculando...</div>
+                    <div class="score-message" id="scoreMessage"></div>
+                    <div class="benchmark-note">
+                        <strong>Referência:</strong> Notas <strong>7-8</strong> indicam boa estruturação. Notas <strong>9-10</strong> representam excelência. Pilares abaixo de 7 precisam de atenção prioritária.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">Visão Geral dos 4 Pilares</h3>
+                <canvas id="radarChart" width="400" height="400"></canvas>
+            </div>
+
+            <div class="detailed-results" id="detailedResults">
+                <!-- Results populated by JS -->
+            </div>
+
+            <div class="cta-section">
+                <h3>Pronto para Acelerar seus Resultados?</h3>
+                <p>Descubra como transformar seus pontos fracos em forças e escalar seu negócio digital.</p>
+                <a href="#" class="btn-cta">Quero Evoluir Agora →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const topics = [
+            {
+                name: 'direcao',
+                label: 'Direção Certeira',
+                shortLabel: 'Direção',
+                icon: '🎯',
+                questions: [
+                    { 
+                        text: 'Como você avalia sua clareza sobre qual nicho e cliente ideal você deveria atender hoje?',
+                        scaleMin: 'Nenhuma clareza',
+                        scaleMax: 'Absolutamente definido'
+                    },
+                    { 
+                        text: 'Como você avalia seu nível de clareza sobre o tipo de produto/serviço que você gostaria de criar?',
+                        scaleMin: 'Chutômetro total',
+                        scaleMax: 'Completamente validado'
+                    },
+                    { 
+                        text: 'Como você avalia sua confiança se existe demanda real para esse produto/serviço?',
+                        scaleMin: 'Vaga ou inexistente',
+                        scaleMax: 'Confio plenamente'
+                    },
+                    { 
+                        text: 'Como você avalia sua capacidade de tomar decisões sem travar ou procrastinar?',
+                        scaleMin: 'Guiada por ansiedade',
+                        scaleMax: 'Guiada por método'
+                    }
+                ]
+            },
+            {
+                name: 'oferta',
+                label: 'Oferta que Gera Remorso',
+                shortLabel: 'Oferta',
+                icon: '💎',
+                questions: [
+                    { 
+                        text: 'Como você avalia sua clareza sobre qual promessa você pode fazer?',
+                        scaleMin: 'Não tenho nenhuma',
+                        scaleMax: 'Promessa clara e objetiva'
+                    },
+                    { 
+                        text: 'Como você avalia sua segurança em comunicar valor no seu produto/serviço?',
+                        scaleMin: 'Muito insegura',
+                        scaleMax: 'Clareza e impacto'
+                    },
+                    { 
+                        text: 'Como você avalia sua clareza sobre o que incluir ou não dentro da sua oferta?',
+                        scaleMin: 'Totalmente perdida',
+                        scaleMax: 'Sei cada elemento'
+                    },
+                    { 
+                        text: 'Como você avalia sua habilidade de explicar seu produto/serviço de forma simples e convincente?',
+                        scaleMin: 'Confusa e travada',
+                        scaleMax: 'Objetiva e clara'
+                    }
+                ]
+            },
+            {
+                name: 'produto',
+                label: 'Produtos que Vendem',
+                shortLabel: 'Produto',
+                icon: '📦',
+                questions: [
+                    { 
+                        text: 'Como você avalia sua capacidade de transformar seu conhecimento em um método claro?',
+                        scaleMin: 'Não faço ideia',
+                        scaleMax: 'Sei montar com clareza'
+                    },
+                    { 
+                        text: 'Como você avalia a estrutura do produto/serviço que você imagina criar?',
+                        scaleMin: 'Bagunçada ou inexistente',
+                        scaleMax: 'Organizada e coerente'
+                    },
+                    { 
+                        text: 'Como você avalia sua segurança para entregar o seu produto e/ou serviço?',
+                        scaleMin: 'Totalmente insegura',
+                        scaleMax: 'Pronta para entregar'
+                    },
+                    { 
+                        text: 'Como você avalia sua clareza sobre o formato ideal do seu produto (curso, mentoria, consultoria, etc.)?',
+                        scaleMin: 'Não sei qual escolher',
+                        scaleMax: 'Formato definido'
+                    },
+                    { 
+                        text: 'Como você avalia sua convicção de que o seu produto/serviço poderá gerar resultado real para alguém?',
+                        scaleMin: 'Talvez não funcione',
+                        scaleMax: 'Entrega transformação'
+                    }
+                ]
+            },
+            {
+                name: 'funis',
+                label: 'Funis de Venda',
+                shortLabel: 'Funis',
+                icon: '🚀',
+                questions: [
+                    { 
+                        text: 'Como você avalia sua capacidade atual de atrair atenção para vender seu produto/serviço?',
+                        scaleMin: 'Não consigo atrair',
+                        scaleMax: 'Atraio com consistência'
+                    },
+                    { 
+                        text: 'Como você avalia sua clareza sobre qual estratégia seguirá para vender?',
+                        scaleMin: 'Totalmente perdida',
+                        scaleMax: 'Caminho definido'
+                    },
+                    { 
+                        text: 'Como você avalia sua segurança para vender quando o produto ficar pronto?',
+                        scaleMin: 'Muito insegura',
+                        scaleMax: 'Segura e preparada'
+                    },
+                    { 
+                        text: 'Como você avalia sua previsão de vendas futura hoje?',
+                        scaleMin: 'Zero previsibilidade',
+                        scaleMax: 'Alta confiança'
+                    }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let radarChart;
+
+        // Flatten all questions
+        const allQuestions = [];
+        topics.forEach(topic => {
+            topic.questions.forEach((question, index) => {
+                allQuestions.push({
+                    topicName: topic.name,
+                    topicLabel: topic.label,
+                    topicIcon: topic.icon,
+                    questionIndex: index,
+                    text: question.text,
+                    scaleMin: question.scaleMin,
+                    scaleMax: question.scaleMax,
+                    id: `${topic.name}_${index}`
+                });
+            });
+        });
+
+        const totalQuestions = allQuestions.length;
+
+        function getTopicFeedback(topicName, percentage) {
+            const feedbacks = {
+                'direcao': {
+                    excellent: "Direção clara, cliente definido, problema validado e decisões guiadas por dados. Seu desafio agora não é clareza, mas transformar isso em produto, oferta e vendas consistentes. Esse é o cenário ideal para acelerar.",
+                    good: "Boa clareza inicial sobre cliente, nicho e problema. Ainda faltam validações concretas e segurança para decidir sem travar, mas você já possui uma base sólida. Com método, você escala clareza para decisão e execução.",
+                    warning: "Você tem algumas ideias soltas, mas ainda falta um norte claro. Existe sensação de 'tenho potencial, mas não sei por onde começar'. Com pequenos ajustes de validação e clareza, a evolução acontece muito rápido.",
+                    critical: "Você está totalmente sem clareza sobre quem atender, o que criar e qual caminho seguir. O cenário hoje é de paralisia, decisões por ansiedade e nenhuma validação real. Sem resolver isso, qualquer ação gera frustração."
+                },
+                'oferta': {
+                    excellent: "Promessa forte, clara e bem comunicada. Você sabe exatamente o que colocar na oferta e como explicar com impacto. Agora é sobre escala e venda — não sobre entender a oferta.",
+                    good: "Promessa clara e comunicação relativamente objetiva. Ainda falta força para se tornar irresistível, mas sua base já é boa. Com empilhamento estratégico, você começa a gerar desejo imediato.",
+                    warning: "Você tem uma ideia do que quer entregar, mas a promessa ainda é fraca e a comunicação insegura. Sabe explicar o que quer fazer, mas não convence. Com um ajuste de narrativa, tudo muda rápido.",
+                    critical: "Você não tem promessa, não sabe comunicar valor e não sabe o que colocar na oferta. O mercado não vê você — e isso não é falta de talento, é falta de estrutura. Essa é a principal trava para começar a vender."
+                },
+                'produto': {
+                    excellent: "Você já tem um método, narrativa clara, estrutura definida e segurança na entrega. Seu desafio não é o produto — é escalar e vender. Esse é o cenário ideal para construir ecossistema e funis.",
+                    good: "Você já tem clareza do que quer ensinar e consegue visualizar uma estrutura. Ainda faltam refinamentos, formato ideal e confiança total na entrega. Com método, vira um produto sólido e escalável.",
+                    warning: "Você tem conhecimento, mas não consegue transformar em método. Existe potencial, mas falta narrativa, sequência e confiança. Com orientação correta, o produto nasce rápido.",
+                    critical: "Você não sabe estruturar seu produto. O método é inexistente, as ideias estão soltas, e a insegurança para entregar é alta. Aqui está a raiz da maior parte das suas travas."
+                },
+                'funis': {
+                    excellent: "Conteúdo forte, caminho definido, narrativa clara e previsibilidade crescente. O seu limite agora é apenas estrutura — dá para escalar imediatamente.",
+                    good: "Você produz conteúdo, sabe vender minimamente e tem noção do seu caminho. Ainda falta previsibilidade, mas sua base é boa. Com ajustes, você começa a vender todos os dias.",
+                    warning: "Você já entende um pouco de conteúdo e sabe qual caminho talvez seguir. Mas ainda falta consistência, narrativa e estratégia para gerar leads. Com um funil simples, já muda totalmente o jogo.",
+                    critical: "Você não atrai atenção, não sabe o caminho de vendas e não se sente segura para vender. Hoje não existe previsibilidade alguma. Sem arrumar isso, mesmo um bom produto não vende."
+                }
+            };
+
+            const feedback = feedbacks[topicName];
+            if (!feedback) return "Continue desenvolvendo este pilar!";
+
+            if (percentage >= 90) return feedback.excellent;
+            if (percentage >= 70) return feedback.good;
+            if (percentage >= 40) return feedback.warning;
+            return feedback.critical;
+        }
+
+        function getStatusClass(percentage) {
+            if (percentage >= 90) return 'excellent';
+            if (percentage >= 70) return 'good';
+            if (percentage >= 40) return 'warning';
+            return 'critical';
+        }
+
+        function getStatusText(percentage) {
+            if (percentage >= 90) return '✓ Excelente (9-10)';
+            if (percentage >= 70) return '◐ Bom (7-8)';
+            if (percentage >= 40) return '⚠ Abaixo da Média (4-6)';
+            return '✗ Crítico (0-3)';
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+        }
+
+        function displayQuestion() {
+            const question = allQuestions[currentQuestionIndex];
+
+            document.getElementById('topicIndicator').innerHTML = `${question.topicIcon} ${question.topicLabel}`;
+            document.getElementById('questionNumber').textContent = `Pergunta ${currentQuestionIndex + 1}/${totalQuestions}`;
+            document.getElementById('questionText').textContent = question.text;
+
+            // Update scale labels
+            const scaleLabels = document.querySelector('.scale-labels');
+            scaleLabels.innerHTML = `
+                <span>${question.scaleMin}</span>
+                <span>${question.scaleMax}</span>
+            `;
+
+            // Clear previous selection
+            const radioButtons = document.querySelectorAll('input[name="currentAnswer"]');
+            radioButtons.forEach(radio => radio.checked = false);
+
+            // Restore previous answer if exists
+            if (answers[question.id] !== undefined) {
+                document.getElementById(`answer${answers[question.id]}`).checked = true;
+            }
+
+            updateNavigationButtons();
+            updateProgress();
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+
+            const selectedAnswer = document.querySelector('input[name="currentAnswer"]:checked');
+            nextBtn.disabled = !selectedAnswer;
+
+            nextBtn.textContent = currentQuestionIndex === totalQuestions - 1 ? 'Ver Resultado →' : 'Próxima →';
+        }
+
+        function saveCurrentAnswer() {
+            const selectedAnswer = document.querySelector('input[name="currentAnswer"]:checked');
+            if (selectedAnswer) {
+                const question = allQuestions[currentQuestionIndex];
+                answers[question.id] = parseInt(selectedAnswer.value);
+            }
+        }
+
+        function nextQuestion() {
+            saveCurrentAnswer();
+
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                animateTransition();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                saveCurrentAnswer();
+                currentQuestionIndex--;
+                animateTransition();
+            }
+        }
+
+        function animateTransition() {
+            const card = document.getElementById('questionCard');
+            card.classList.add('fade-out');
+
+            setTimeout(() => {
+                displayQuestion();
+                card.classList.remove('fade-out');
+                card.classList.add('fade-in');
+
+                setTimeout(() => card.classList.remove('fade-in'), 400);
+            }, 300);
+        }
+
+        function calculateResults() {
+            const topicResults = {};
+            let totalScore = 0;
+            let totalAnswered = 0;
+
+            topics.forEach(topic => {
+                let topicScore = 0;
+                let topicAnswered = 0;
+
+                topic.questions.forEach((_, index) => {
+                    const questionId = `${topic.name}_${index}`;
+                    if (answers[questionId] !== undefined) {
+                        topicScore += answers[questionId];
+                        topicAnswered++;
+                    }
+                });
+
+                const maxPossible = topicAnswered * 10;
+                const percentage = maxPossible > 0 ? (topicScore / maxPossible) * 100 : 0;
+                const average = topicAnswered > 0 ? topicScore / topicAnswered : 0;
+
+                topicResults[topic.name] = {
+                    score: topicScore,
+                    average: average,
+                    percentage: percentage,
+                    label: topic.label,
+                    shortLabel: topic.shortLabel,
+                    icon: topic.icon,
+                    questionsAnswered: topicAnswered
+                };
+
+                totalScore += topicScore;
+                totalAnswered += topicAnswered;
+            });
+
+            const overallMax = totalAnswered * 10;
+            const overallPercentage = overallMax > 0 ? (totalScore / overallMax) * 100 : 0;
+
+            return {
+                individual: topicResults,
+                total: totalScore,
+                percentage: overallPercentage
+            };
+        }
+
+        function getScoreLevel(percentage) {
+            if (percentage >= 90) return {
+                level: 'Excelente',
+                message: 'Você está em um cenário ideal para acelerar! Direção clara, oferta definida, produto estruturado e caminho de vendas traçado. Agora é sobre escalar e executar com consistência.'
+            };
+            if (percentage >= 70) return {
+                level: 'Bom - Estruturado',
+                message: 'Boa estrutura estabelecida nos pilares principais. Você já possui uma base sólida. Com refinamentos estratégicos, pode escalar clareza, oferta e vendas rapidamente.'
+            };
+            if (percentage >= 40) return {
+                level: 'Abaixo da Média',
+                message: 'Você tem potencial, mas ainda falta clareza em pontos importantes. Com os ajustes certos de validação, narrativa e estrutura, a evolução pode acontecer muito rápido.'
+            };
+            return {
+                level: 'Crítico',
+                message: 'Existem travas importantes que precisam ser resolvidas. A boa notícia: identificar os gaps é o primeiro passo. Com método e direcionamento, tudo pode mudar rapidamente.'
+            };
+        }
+
+        function createRadarChart(results) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+
+            if (radarChart) radarChart.destroy();
+
+            const labels = topics.map(t => t.shortLabel);
+            const dataPoints = topics.map(t => results.individual[t.name].average);
+            const idealPoints = new Array(topics.length).fill(7);
+
+            const isMobile = window.innerWidth <= 768;
+
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Seu Resultado',
+                            data: dataPoints,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#10B981',
+                            pointBorderColor: '#0a0f0d',
+                            pointBorderWidth: 2,
+                            pointRadius: 7
+                        },
+                        {
+                            label: 'Referência Bom (7)',
+                            data: idealPoints,
+                            borderColor: '#34D399',
+                            backgroundColor: 'rgba(52, 211, 153, 0.05)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointBackgroundColor: '#34D399',
+                            pointBorderColor: '#0a0f0d',
+                            pointBorderWidth: 2,
+                            pointRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#a3a3a3',
+                                font: { size: isMobile ? 11 : 13, family: 'Outfit', weight: '500' },
+                                padding: 20,
+                                usePointStyle: true
+                            },
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2,
+                                color: '#525252',
+                                backdropColor: 'transparent',
+                                font: { size: 10 }
+                            },
+                            grid: { color: 'rgba(16, 185, 129, 0.15)' },
+                            angleLines: { color: 'rgba(16, 185, 129, 0.15)' },
+                            pointLabels: {
+                                color: '#ffffff',
+                                font: { size: isMobile ? 11 : 13, family: 'Outfit', weight: '600' },
+                                padding: 18
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayDetailedResults(results) {
+            const container = document.getElementById('detailedResults');
+            container.innerHTML = '';
+
+            // Sort by percentage (worst first)
+            const sortedTopics = [...topics].sort((a, b) => 
+                results.individual[a.name].percentage - results.individual[b.name].percentage
+            );
+
+            sortedTopics.forEach(topic => {
+                const result = results.individual[topic.name];
+                const statusClass = getStatusClass(result.percentage);
+                const statusText = getStatusText(result.percentage);
+                const feedback = getTopicFeedback(topic.name, result.percentage);
+
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.innerHTML = `
+                    <div class="result-header">
+                        <div class="result-title">${topic.icon} ${topic.label}</div>
+                        <div class="result-score">${result.average.toFixed(1)} <small>/ 10</small></div>
+                    </div>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="result-status ${statusClass}">${statusText} (${result.percentage.toFixed(0)}%)</div>
+                    <div class="result-feedback">${feedback}</div>
+                `;
+                container.appendChild(resultItem);
+
+                // Animate bar
+                setTimeout(() => {
+                    resultItem.querySelector('.result-fill').style.width = `${result.percentage}%`;
+                }, 100);
+            });
+        }
+
+        function showResults() {
+            const results = calculateResults();
+            const scoreInfo = getScoreLevel(results.percentage);
+
+            document.getElementById('totalScore').textContent = `${results.percentage.toFixed(0)}%`;
+            document.getElementById('scoreLevel').textContent = scoreInfo.level;
+            document.getElementById('scoreMessage').textContent = scoreInfo.message;
+
+            createRadarChart(results);
+            displayDetailedResults(results);
+
+            document.getElementById('quizSection').style.display = 'none';
+            document.querySelector('.progress-section').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listeners
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'currentAnswer') {
+                updateNavigationButtons();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key >= '0' && e.key <= '9') {
+                const num = parseInt(e.key);
+                document.getElementById(`answer${num}`).checked = true;
+                updateNavigationButtons();
+            } else if (e.key === 'Enter' && !document.getElementById('nextBtn').disabled) {
+                nextQuestion();
+            } else if (e.key === 'ArrowRight' && !document.getElementById('nextBtn').disabled) {
+                nextQuestion();
+            } else if (e.key === 'ArrowLeft' && currentQuestionIndex > 0) {
+                previousQuestion();
+            }
+        });
+
+        // Initialize
+        displayQuestion();
+    </script>
+</body>
+</html>
