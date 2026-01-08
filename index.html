@@ -828,7 +828,7 @@
 
         <div class="quiz-section" id="quizSection">
             <div class="question-card" id="questionCard">
-                <div class="topic-indicator" id="topicIndicator">🎯 Direção Certeira</div>
+                <div class="topic-indicator" id="topicIndicator">🎯 Produto Certeiro</div>
                 <div class="question-number" id="questionNumber">Pergunta 1/17</div>
                 <div class="question-text" id="questionText">
                     Como você avalia sua clareza sobre qual nicho e cliente ideal você deveria atender hoje?
@@ -907,8 +907,8 @@
         const topics = [
             {
                 name: 'direcao',
-                label: 'Direção Certeira',
-                shortLabel: 'Direção',
+                label: 'Produto Certeiro',
+                shortLabel: 'Produto',
                 icon: '🎯',
                 questions: [
                     { 
@@ -1050,7 +1050,7 @@
         function getTopicFeedback(topicName, percentage) {
             const feedbacks = {
                 'direcao': {
-                    excellent: "Direção clara, cliente definido, problema validado e decisões guiadas por dados. Seu desafio agora não é clareza, mas transformar isso em produto, oferta e vendas consistentes. Esse é o cenário ideal para acelerar.",
+                    excellent: "Produto certeiro definido, cliente validado, problema claro e decisões guiadas por dados. Seu desafio agora não é clareza, mas transformar isso em oferta e vendas consistentes. Esse é o cenário ideal para acelerar.",
                     good: "Boa clareza inicial sobre cliente, nicho e problema. Ainda faltam validações concretas e segurança para decidir sem travar, mas você já possui uma base sólida. Com método, você escala clareza para decisão e execução.",
                     warning: "Você tem algumas ideias soltas, mas ainda falta um norte claro. Existe sensação de 'tenho potencial, mas não sei por onde começar'. Com pequenos ajustes de validação e clareza, a evolução acontece muito rápido.",
                     critical: "Você está totalmente sem clareza sobre quem atender, o que criar e qual caminho seguir. O cenário hoje é de paralisia, decisões por ansiedade e nenhuma validação real. Sem resolver isso, qualquer ação gera frustração."
@@ -1232,7 +1232,7 @@
         function getScoreLevel(percentage) {
             if (percentage >= 90) return {
                 level: 'Excelente',
-                message: 'Você está em um cenário ideal para acelerar! Direção clara, oferta definida, produto estruturado e caminho de vendas traçado. Agora é sobre escalar e executar com consistência.'
+                message: 'Você está em um cenário ideal para acelerar! Produto certeiro definido, oferta clara, estrutura pronta e caminho de vendas traçado. Agora é sobre escalar e executar com consistência.'
             };
             if (percentage >= 70) return {
                 level: 'Bom - Estruturado',
